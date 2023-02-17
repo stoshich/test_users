@@ -1,24 +1,32 @@
 import { useState, useEffect } from "react"
 
 interface IValidations {
-  minLength: number;
-  isEmpty: boolean
+  isEmpty: boolean;
+  isUsername?: boolean;
+  isPassword?: boolean
 }
 
 const useValidation = (value: any, validations: IValidations) => {
 
   const [isEmpty, setIsEmpty] = useState(false)
-  const [minLengthError, setMinLengthError] = useState(false)
+  const [usernameError, setUsernameError] = useState(false)
+  const [passwordError, setPasswordError] = useState(false)
+
 
 
   useEffect(() => {
     for (const validation in validations) {
       switch (validation) {
-        case 'minLength':
-          value.length < validations[validation] ? setMinLengthError(true) : setMinLengthError(false)
-          break
         case 'isEmpty':
           value ? setIsEmpty(false) : setIsEmpty(true)
+          break
+        case 'isUsername':
+          const reEmail = /^[A-Za-z]\w{7,14}$/
+          reEmail.test(String(value)) ? setUsernameError(false) : setUsernameError(true)
+          break
+        case 'isPassword':
+          const rePass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+          rePass.test(String(value)) ? setPasswordError(false) : setPasswordError(true)
           break
       }
     }
@@ -26,7 +34,8 @@ const useValidation = (value: any, validations: IValidations) => {
 
   return {
     isEmpty,
-    minLengthError,
+    usernameError,
+    passwordError
   }
 }
 
@@ -46,21 +55,19 @@ export const useInput = (initialState: any, validations: IValidations) => {
   }
 
   useEffect(() => {
-    if (isDirty && (valid.isEmpty || valid.minLengthError)) {
-      setErrorMessage('Error')
+    if (isDirty && (valid.isEmpty || valid.usernameError || valid.passwordError)) {
+      setErrorMessage('Ошибка в заполнении')
       setError(true)
     } else {
       setErrorMessage('')
       setError(false)
     }
-  }, [isDirty, valid.isEmpty, valid.minLengthError])
+  }, [isDirty, valid.isEmpty, valid.usernameError, valid.passwordError])
 
   return {
     value,
     onChange,
     onBlur,
-    isDirty,
-    ...valid,
     errorMessage,
     error
   }

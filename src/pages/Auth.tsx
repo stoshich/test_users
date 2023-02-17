@@ -1,13 +1,25 @@
 import { Box, Button } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router'
 import { useInput } from '../hooks/useInput'
+import { loginPost } from '../HTTP/login'
 
 const Auth = () => {
 
-  const [passwordError, setPasswordError] = useState(false)
-  const username = useInput('', { isEmpty: true, minLength: 3 })
-  const password = useInput('', { isEmpty: true, minLength: 6 })
+  const username = useInput('', { isEmpty: true, isUsername: true })
+  const password = useInput('', { isEmpty: true, isPassword: true })
+  const navigate = useNavigate()
+
+  const onEnterHandler = async () => {
+    try {
+      const response = await loginPost(username.value, password.value)
+      localStorage.setItem('token', 'Token ' + response.token)
+      navigate('/users')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className='auth'>
@@ -29,17 +41,24 @@ const Auth = () => {
         </div>
         <div className='auth__input'>
           <TextField
-            error={passwordError}
+            error={password.error}
             id='password'
             label='Password'
             type='password'
             value={password.value}
             onChange={e => password.onChange(e)}
             onBlur={password.onBlur}
+            helperText={password.errorMessage}
           />
         </div>
         <div className='auth__btn'>
-          <Button variant='contained'>Войти</Button>
+          <Button
+            disabled={password.error || username.error}
+            variant='contained'
+            onClick={onEnterHandler}
+          >
+            Войти
+          </Button>
         </div>
       </Box>
     </div>
