@@ -45,6 +45,7 @@ export const useInput = (initialState: any, validations: IValidations) => {
   const valid = useValidation(value, validations)
   const [errorMessage, setErrorMessage] = useState('')
   const [error, setError] = useState(false)
+  const [disabledBtn, setDisabledBtn] = useState(true)
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setValue(e.target.value)
@@ -56,7 +57,11 @@ export const useInput = (initialState: any, validations: IValidations) => {
 
   useEffect(() => {
     if (isDirty && (valid.isEmpty || valid.usernameError || valid.passwordError)) {
-      setErrorMessage('Ошибка в заполнении')
+      if (validations.isPassword) {
+        setErrorMessage('Пароль должен быть больше 7 символов и содержать цифры, строчные и заглавные буквы')
+      } else if (validations.isUsername) {
+        setErrorMessage('Username должен быть не меньше 8 и не больше 15 символов')
+      }
       setError(true)
     } else {
       setErrorMessage('')
@@ -64,12 +69,21 @@ export const useInput = (initialState: any, validations: IValidations) => {
     }
   }, [isDirty, valid.isEmpty, valid.usernameError, valid.passwordError])
 
+  useEffect(() => {
+    if (valid.isEmpty || valid.usernameError || valid.passwordError) {
+      setDisabledBtn(true)
+    } else {
+      setDisabledBtn(false)
+    }
+  }, [valid.isEmpty, valid.usernameError, valid.passwordError])
+
   return {
     value,
     onChange,
     onBlur,
     errorMessage,
-    error
+    error,
+    disabledBtn
   }
 
 }

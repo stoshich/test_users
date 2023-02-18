@@ -1,3 +1,54 @@
-.table__head {
+/* Auth */
+
+.auth {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+}
+
+.auth__input {
+  width: 400px;
+}
+
+.auth__btn {
+  width: 200px;
+}
+
+@media (max-width: 470px) {
+  .auth {
+    gap: 20px;
+  }
+
+  .auth__input {
+    max-width: 300px;
+  }
+
+  .auth__btn {
+    width: 100px;
+  }
+}
+
+/* Users */
+.users {
+  display: flex;
+  flex-direction: column;
+}
+
+.users__header {
+  max-height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.table__id {
   cursor: pointer;
 }
