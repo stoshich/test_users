@@ -52,3 +52,20 @@
 .table__id {
   cursor: pointer;
 }
+
+.table__id img {
+  width: 12px;
+  height: 12px;
+}
+
+@media (max-width: 420px) {
+  .table__id img {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .MuiTableCell-root {
+    font-size: 10px !important;
+  }
+}

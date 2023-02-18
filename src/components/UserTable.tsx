@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { IUser } from '../types/IUser'
+import pngwing from '../assets/pngwing.png'
 
 interface UserTableProps {
   sortedAndFiltered: IUser[];
@@ -13,7 +14,7 @@ const UserTable: FC<UserTableProps> = ({ sortedAndFiltered, sortById }) => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell className='table__id' onClick={sortById} >ID</TableCell>
+            <TableCell className='table__id' onClick={sortById} >ID <img src={pngwing} alt="" /></TableCell>
             <TableCell onClick={() => { }}>Username</TableCell>
             <TableCell>First Name</TableCell>
             <TableCell>Last Name</TableCell>
